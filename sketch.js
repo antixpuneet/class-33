@@ -53,7 +53,7 @@ function draw(){
         noStroke();
         textSize(35)
         fill("white")
-        text("Score  " + score, width-300, 50)
+        text("Score :  " + score, width-300, 50)
     
     Engine.update(engine);
     //strokeWeight(4);
@@ -72,8 +72,8 @@ function draw(){
 
     box5.display();
     log4.display();
-    log5.display();
-
+    log5.display()
+console.log(bird.body.speed);
     bird.display();
     platform.display();
     //log6.display();
@@ -81,9 +81,9 @@ function draw(){
 }
 
 function mouseDragged(){
-    //if (gameState!=="launched"){
+    if (gameState==="onSling"){
         Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
-    //}
+   }
 }
 
 
@@ -92,20 +92,23 @@ function mouseReleased(){
     gameState = "launched";
 }
 
-function keyPressed(){
-    if(keyCode === 32){
+function keyPressed(){  
+    if(keyCode === 32&&bird.body.speed<1){
+        Matter.Body.setPosition(bird.body, {x: 200,y: 50});
        slingshot.attach(bird.body);
+       bird.trajectory=[];
+       gameState="onSling";
     }
 }
 
 async function getBackgroundImg(){
-    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Kolkata");
+    var response = await fetch("http://worldtimeapi.org/api/timezone/Asia/Tokyo");
     var responseJSON = await response.json();
 
     var datetime = responseJSON.datetime;
     var hour = datetime.slice(11,13);
     
-    if(hour>=0600 && hour<=1900){
+    if(hour>=06 && hour<=19){
         bg = "sprites/bg1.png";
     }
     else{
